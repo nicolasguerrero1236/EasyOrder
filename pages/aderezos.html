@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aderezos - Bros Burger y Lomos</title>
+    <link rel="stylesheet" href="../styles/estilos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+
+<body>
+    <!-- Encabezado -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1>🍔 Bros Burger y Lomos</h1>
+            </div>
+            <div class="carrito-icon">
+                <a href="carrito.html" class="btn-carrito">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span id="contador-carrito" class="contador">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sección de productos -->
+    <div class="productos-header">
+        <div class="container">
+            <h1>🍯 Aderezos</h1>
+            <p>Salsas y mayonesas especiales para tus comidas</p>
+        </div>
+    </div>
+
+    <main class="container">
+        <a href="../index.html" class="btn-volver-inicio">← Volver al Inicio</a>
+        <div class="grid-productos" id="grid-aderezos"></div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2026 Bros Burger y Lomos. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="../javascript/main.js"></script>
+    <script>
+        // Productos aderezos
+        const aderezos = [
+            {
+                id: 'aderezo1',
+                nombre: 'Mayonesa Casera',
+                descripcion: 'Mayonesa fresca y cremosa preparada en casa',
+                precio: 1000,
+                emoji: '🍯',
+            },
+            {
+                id: 'aderezo2',
+                nombre: 'Mayonesa con Ajo',
+                descripcion: 'Mayonesa casera con ajo fresco',
+                precio: 1000,
+                emoji: '🍯',
+            },
+            {
+                id: 'aderezo3',
+                nombre: 'Cheddar',
+                descripcion: 'Salsa de queso cheddar cremoso',
+                precio: 2000,
+                emoji: '🍯',
+            },
+            {
+                id: 'aderezo4',
+                nombre: 'Barbacoa',
+                descripcion: 'Salsa BBQ ahumada y dulce',
+                precio: 1000,
+                emoji: '🍯',
+            },
+            {
+                id: 'aderezo5',
+                nombre: 'Ketchup',
+                descripcion: 'Ketchup de tomate natural',
+                precio: 1000,
+                emoji: '🍯',
+            },
+            {
+                id: 'aderezo6',
+                nombre: 'Mostaza',
+                descripcion: 'Mostaza clásica picante',
+                precio: 1000,
+                emoji: '🍯',
+            },
+            {
+                id: 'aderezo7',
+                nombre: 'Salsa Picante',
+                descripcion: 'Salsa picante con chiles y especias',
+                precio: 1000,
+                emoji: '🍯',
+
+            },
+            {
+                id: 'aderezo8',
+                nombre: 'Chimichurri',
+                descripcion: 'Chimichurri argentino con hierbas frescas',
+                precio: 1000,
+                emoji: '🍯',
+            }
+        ];
+
+        // Renderizar productos
+        function renderizarProductos() {
+            const grid = document.getElementById('grid-aderezos');
+            grid.innerHTML = aderezos.map(aderezo => {
+                const imagen = aderezo.imagen
+                    ? `<img src="${aderezo.imagen}" alt="${aderezo.nombre}" style="width: 100%; height: 100%; object-fit: cover;">`
+                    : aderezo.emoji;
+
+                return `
+                <div class="producto-card">
+                    <div class="producto-imagen">${imagen}</div>
+                    <div class="producto-info">
+                        <h3>${aderezo.nombre}</h3>
+                        <p class="producto-descripcion">${aderezo.descripcion}</p>
+                        <div class="producto-footer">
+                            <span class="producto-precio">$${aderezo.precio.toFixed(2)}</span>
+                            <button class="btn-agregar" onclick="agregarAlCarrito({
+                                id: '${aderezo.id}',
+                                nombre: '${aderezo.nombre}',
+                                precio: ${aderezo.precio},
+                                emoji: '${aderezo.emoji}'
+                            })">
+                                <i class="fas fa-plus"></i> Agregar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            }).join('');
+        }
+
+        document.addEventListener('DOMContentLoaded', renderizarProductos);
+    </script>
+</body>
+
+</html>

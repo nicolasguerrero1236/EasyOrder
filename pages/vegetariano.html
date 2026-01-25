@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vegetariano - Bros Burger y Lomos</title>
+    <link rel="stylesheet" href="../styles/estilos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+<body>
+    <!-- Encabezado -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1>🍔 Bros Burger y Lomos</h1>
+            </div>
+            <div class="carrito-icon">
+                <a href="carrito.html" class="btn-carrito">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span id="contador-carrito" class="contador">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sección de productos -->
+    <div class="productos-header">
+        <div class="container">
+            <h1>🌱 Vegetariano</h1>
+            <p>Opciones deliciosas y sabrosas sin carne</p>
+        </div>
+    </div>
+
+    <main class="container">
+        <a href="../index.html" class="btn-volver-inicio">← Volver al Inicio</a>
+        <div class="grid-productos" id="grid-vegetariano"></div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2026 Bros Burger y Lomos. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="../javascript/main.js"></script>
+    <script>
+        // Productos vegetarianos
+        const vegetarianos = [
+            {
+                id: 'veg1',
+                nombre: 'Hamburguesa Vegetariana Simple',
+                descripcion: 'PAN DE PAPA, MAYONESA CASERA, MEDALLON VEGETARIANO, LECHUGA, TOMATE, HUEVO, PEPINILLO, QUESO TYBO Y PAPAS FRITAS',
+                precio: 11500,
+                emoji: '🥗',
+                imagen: '../files/hamburguesa_vegetariana_simple.png'
+            },
+            {
+                id: 'veg2',
+                nombre: 'Hamburguesa Vegetariana Doble',
+                descripcion: 'PAN DE PAPA, MAYONESA CASERA, DOS MEDALLONES VEGETARIANO, LECHUGA, TOMATE, HUEVO, PEPINILLO, QUESO TYBO Y PAPAS FRITAS',
+                precio: 14000,
+                emoji: '🥗',
+                imagen: '../files/hamburguesa_vegetariana_doble.png'
+            },
+            {
+                id: 'veg3',
+                nombre: 'Hamburguesa Vegetariana Triple',
+                descripcion: 'PAN DE PAPA, MAYONESA CASERA, TRES MEDALLONES VEGETARIANO, LECHUGA, TOMATE, HUEVO, PEPINILLO, QUESO TYBO Y PAPAS FRITAS',
+                precio: 16500,
+                emoji: '🥗',
+                imagen: '../files/hamburguesa_vegetariana_triple.png'
+            },
+            {
+                id: 'veg4',
+                nombre: 'Lomo Vegetariano',
+                descripcion: 'PAN DE LOMO DE 20CM, BERENJENA SALTEADA, CEBOLLA SALTEADA, PIMIENTOS SALTEADOS (ROJO, AMARILLO Y VERDE), LECHUGA, TOMATE, HUEVO, QUESO TYBO Y PAPAS FRITAS',
+                precio: 14000,
+                emoji: '🥗',
+                imagen: '../files/lomo_vegetariano.png'
+            }
+        ];
+
+        // Renderizar productos
+        function renderizarProductos() {
+            const grid = document.getElementById('grid-vegetariano');
+            grid.innerHTML = vegetarianos.map(veg => {
+                const imagen = veg.imagen
+                    ? `<img src="${veg.imagen}" alt="${veg.nombre}" style="width: 100%; height: 100%; object-fit: cover;">`
+                    : veg.emoji;
+
+                return `
+                <div class="producto-card">
+                    <div class="producto-imagen">${imagen}</div>
+                    <div class="producto-info">
+                        <h3>${veg.nombre}</h3>
+                        <p class="producto-descripcion">${veg.descripcion}</p>
+                        <div class="producto-footer">
+                            <span class="producto-precio">$${veg.precio.toFixed(2)}</span>
+                            <button class="btn-agregar" onclick="agregarAlCarrito({
+                                id: '${veg.id}',
+                                nombre: '${veg.nombre}',
+                                precio: ${veg.precio},
+                                emoji: '${veg.emoji}'
+                            })">
+                                <i class="fas fa-plus"></i> Agregar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            }).join('');
+        }
+
+        document.addEventListener('DOMContentLoaded', renderizarProductos);
+    </script>
+</body>
+</html>

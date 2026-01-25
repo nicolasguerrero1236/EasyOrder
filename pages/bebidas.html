@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bebidas - Bros Burger y Lomos</title>
+    <link rel="stylesheet" href="../styles/estilos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+<body>
+    <!-- Encabezado -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1>🍔 Bros Burger y Lomos</h1>
+            </div>
+            <div class="carrito-icon">
+                <a href="carrito.html" class="btn-carrito">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span id="contador-carrito" class="contador">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sección de productos -->
+    <div class="productos-header">
+        <div class="container">
+            <h1>🥤 Bebidas</h1>
+            <p>Gaseosas, cervezas y bebidas especiales</p>
+        </div>
+    </div>
+
+    <main class="container">
+        <a href="../index.html" class="btn-volver-inicio">← Volver al Inicio</a>
+        <div class="grid-productos" id="grid-bebidas"></div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2026 Bros Burger y Lomos. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="../javascript/main.js"></script>
+    <script>
+        // Productos bebidas
+        const bebidas = [
+            {
+                id: 'beb1',
+                nombre: 'Coca Cola 500ml',
+                descripcion: 'Refresco clásico y refrescante',
+                precio: 3000,
+                emoji: '🥤',
+                imagen: '../files/coca_medio.png'
+            },
+            {
+                id: 'beb2',
+                nombre: 'Fanta 500ml',
+                descripcion: 'Refresco sabor naranja',
+                precio: 3000,
+                emoji: '🥤',
+                imagen: '../files/fanta_medio.png'
+            },
+            {
+                id: 'beb3',
+                nombre: 'Sprite 500ml',
+                descripcion: 'Refresco sabor lima-limón',
+                precio: 3000,
+                emoji: '🥤',
+                imagen: '../files/sprite_medio.png'
+            },
+            {
+                id: 'beb4',
+                nombre: 'Coca Cola Zero 500ml',
+                descripcion: 'Coca Cola sin azúcar',
+                precio: 3000,
+                emoji: '🥤',
+                imagen: '../files/coca_zero_medio.png'
+            },
+            {
+                id: 'beb5',
+                nombre: 'Schweppes 500ml',
+                descripcion: 'Agua tónica premium',
+                precio: 3000,
+                emoji: '🥤',
+                imagen: '../files/schweppes_medio.png'
+            },
+            {
+                id: 'beb6',
+                nombre: 'Agua Bonaqua 500ml',
+                descripcion: 'Agua mineral natural',
+                precio: 2500,
+                emoji: '🥤',
+                imagen: '../files/agua_medio.png'
+            },
+            {
+                id: 'beb7',
+                nombre: 'Aquarius Manzana 500ml',
+                descripcion: 'Bebida isotónica sabor manzana',
+                precio: 3000,
+                emoji: '🥤',
+                imagen: '../files/aquarius_manzana_medio.png'
+            },
+            {
+                id: 'beb8',
+                nombre: 'Aquarius Pera 500ml',
+                descripcion: 'Bebida isotónica sabor pera',
+                precio: 3000,
+                emoji: '🥤',
+                imagen: '../files/aquarius_pera_medio.png'
+            },
+            {
+                id: 'beb9',
+                nombre: 'Aquarius Pomelo 500ml',
+                descripcion: 'Bebida isotónica sabor pomelo',
+                precio: 3000,
+                emoji: '🥤',
+                imagen: '../files/aquarius_pomelo_medio.png'
+            },
+            {
+                id: 'beb10',
+                nombre: 'Aquarius Naranja 500ml',
+                descripcion: 'Bebida isotónica sabor naranja',
+                precio: 3000,
+                emoji: '🥤',
+                imagen: '../files/aquarius_naranja_medio.png'
+            },
+            {
+                id: 'beb11',
+                nombre: 'Aquarius Limonada 500ml',
+                descripcion: 'Bebida isotónica sabor limonada',
+                precio: 3000,
+                emoji: '🥤',
+                imagen: '../files/aquarius_limonada_medio.png'
+            },
+            {
+                id: 'beb12',
+                nombre: 'Aquarius Manzana 1,5L',
+                descripcion: 'Bebida isotónica sabor manzana formato familiar',
+                precio: 6500,
+                emoji: '🥤',
+                imagen: '../files/aquarius_manzana_litro.png'
+            },
+            {
+                id: 'beb13',
+                nombre: 'Aquarius Pera 1,5L',
+                descripcion: 'Bebida isotónica sabor pera formato familiar',
+                precio: 6500,
+                emoji: '🥤',
+                imagen: '../files/aquarius_pera_litro.png'
+            },
+            {
+                id: 'beb14',
+                nombre: 'Coca Cola 1,5L',
+                descripcion: 'Refresco clásico formato familiar',
+                precio: 7000,
+                emoji: '🥤',
+                imagen: '../files/coca_litro.png'
+            },
+            {
+                id: 'beb15',
+                nombre: 'Coca Cola Zero 1,5L',
+                descripcion: 'Coca Cola sin azúcar formato familiar',
+                precio: 7000,
+                emoji: '🥤',
+                imagen: '../files/coca_zero_litro.png'
+            },
+            {
+                id: 'beb16',
+                nombre: 'Fanta 1,5L',
+                descripcion: 'Refresco sabor naranja formato familiar',
+                precio: 7000,
+                emoji: '🥤',
+                imagen: '../files/fanta_litro.png'
+            },
+            {
+                id: 'beb17',
+                nombre: 'Sprite 1,5L',
+                descripcion: 'Refresco sabor lima-limón formato familiar',
+                precio: 7000,
+                emoji: '🥤',
+                imagen: '../files/sprite_litro.png'
+            },
+            {
+                id: 'beb18',
+                nombre: 'Schweppes 1,5L',
+                descripcion: 'Agua tónica premium formato familiar',
+                precio: 7000,
+                emoji: '🥤',
+                imagen: '../files/schweppes_litro.png'
+            },
+            {
+                id: 'beb19',
+                nombre: 'Cerveza Monjita Heineken',
+                descripcion: 'Cerveza Heineken en botella monjita',
+                precio: 6000,
+                emoji: '🍺',
+                imagen: '../files/monjita_heineken.png'
+            },
+            {
+                id: 'beb20',
+                nombre: 'Cerveza Monjita Corona',
+                descripcion: 'Cerveza Corona en botella monjita',
+                precio: 6000,
+                emoji: '🍺',
+                imagen: '../files/monjita_corona.png'
+            },
+            {
+                id: 'beb21',
+                nombre: 'Cerveza Lata Miller',
+                descripcion: 'Cerveza Miller en lata',
+                precio: 6000,
+                emoji: '🍺',
+                imagen: '../files/lata_miller.png'
+            },
+            {
+                id: 'beb22',
+                nombre: 'Cerveza Lata Imperial',
+                descripcion: 'Cerveza Imperial en lata',
+                precio: 6000,
+                emoji: '🍺',
+                imagen: '../files/lata_imperial.png'
+            },
+            {
+                id: 'beb23',
+                nombre: 'Cerveza Lata Amstel',
+                descripcion: 'Cerveza Amstel en lata',
+                precio: 5500,
+                emoji: '🍺',
+                imagen: '../files/lata_amstel.png'
+            },
+            {
+                id: 'beb24',
+                nombre: 'Cerveza Lata Heineken',
+                descripcion: 'Cerveza Heineken en lata',
+                precio: 6500,
+                emoji: '🍺',
+                imagen: '../files/lata_heineken.png'
+            }
+        ];
+
+        // Renderizar productos
+        function renderizarProductos() {
+            const grid = document.getElementById('grid-bebidas');
+            grid.innerHTML = bebidas.map(beb => {
+                const imagen = beb.imagen
+                    ? `<img src="${beb.imagen}" alt="${beb.nombre}" style="width: 100%; height: 100%; object-fit: cover;">`
+                    : beb.emoji;
+
+                return `
+                <div class="producto-card">
+                    <div class="producto-imagen">${imagen}</div>
+                    <div class="producto-info">
+                        <h3>${beb.nombre}</h3>
+                        <p class="producto-descripcion">${beb.descripcion}</p>
+                        <div class="producto-footer">
+                            <span class="producto-precio">$${beb.precio.toFixed(2)}</span>
+                            <button class="btn-agregar" onclick="agregarAlCarrito({
+                                id: '${beb.id}',
+                                nombre: '${beb.nombre}',
+                                precio: ${beb.precio},
+                                emoji: '${beb.emoji}'
+                            })">
+                                <i class="fas fa-plus"></i> Agregar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            }).join('');
+        }
+
+        document.addEventListener('DOMContentLoaded', renderizarProductos);
+    </script>
+</body>
+</html>

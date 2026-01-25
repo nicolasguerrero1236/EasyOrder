@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de Compras - Bros Burger y Lomos</title>
+    <link rel="stylesheet" href="../styles/estilos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Encabezado -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1>🍔 Bros Burger y Lomos</h1>
+            </div>
+            <div class="carrito-icon">
+                <a href="carrito.html" class="btn-carrito">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span id="contador-carrito" class="contador">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div style="margin-bottom: 30px;">
+            <h1 style="color: var(--color-primary); margin-bottom: 10px;">🛒 Tu Carrito de Compras</h1>
+        </div>
+
+        <!-- Carrito vacío -->
+        <div id="carrito-vacio" class="carrito-vacio" style="display: none;">
+            <i class="fas fa-shopping-cart"></i>
+            <h2>Tu carrito está vacío</h2>
+            <p>¡Añade algunos productos para empezar!</p>
+            <a href="../index.html" class="btn-primary">Volver al Menú</a>
+        </div>
+
+        <!-- Carrito con productos -->
+        <div id="carrito-contenido" style="display: none;">
+            <div class="carrito-container">
+                <!-- Tabla de productos -->
+                <table class="tabla-carrito">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Precio Unitario</th>
+                            <th>Cantidad</th>
+                            <th>Subtotal</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-items">
+                    </tbody>
+                </table>
+
+                <!-- Resumen -->
+                <div class="carrito-resumen">
+                    <div class="resumen-item">
+                        <span>Subtotal:</span>
+                        <span id="subtotal">$0.00</span>
+                    </div>
+                    <div class="resumen-item">
+                        <span>Envío/Retiro:</span>
+                        <span id="envio">$0.00</span>
+                    </div>
+                    <div class="resumen-item total">
+                        <span>TOTAL:</span>
+                        <span id="total">$0.00</span>
+                    </div>
+                </div>
+
+                <!-- Botones de acción -->
+                <div class="carrito-acciones">
+                    <a href="../index.html" class="btn-continuar">
+                        <i class="fas fa-arrow-left"></i> Continuar Comprando
+                    </a>
+                    <button class="btn-primary" onclick="vaciarCarrito()" style="background-color: #95a5a6;">
+                        <i class="fas fa-trash"></i> Vaciar Carrito
+                    </button>
+                </div>
+            </div>
+
+            <!-- Formulario de datos -->
+            <div style="margin-top: 40px;">
+                <div class="formulario-cliente">
+                    <h2><i class="fas fa-user"></i> Información de Contacto</h2>
+                    <form onsubmit="enviarPedido(event)">
+                        <input type="text" id="nombre" placeholder="Tu nombre completo *" required>
+                        <input type="tel" id="telefono" placeholder="Tu teléfono (sin WhatsApp) *" required>
+                        <input type="email" id="email" placeholder="Tu email (opcional)">
+                        <input type="text" id="direccion" placeholder="Dirección de entrega/retiro (opcional)">
+                        
+                        <div style="display: flex; align-items: center; gap: 10px; padding: 10px; background: #f8f9fa; border-radius: 5px; margin: 10px 0;">
+                            <input type="checkbox" id="delivery" onchange="actualizarCarrito()" style="width: 20px; height: 20px; cursor: pointer;">
+                            <label for="delivery" style="cursor: pointer; margin: 0;">🚚 Delivery (+$500)</label>
+                        </div>
+                        
+                        <textarea id="notas" placeholder="Notas especiales (ej: Sin cebolla, sin mayo, etc.)"></textarea>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                            <button type="button" class="btn-secondary" onclick="document.getElementById('formulario-oculto').style.display='none'">
+                                <i class="fas fa-times"></i> Cancelar
+                            </button>
+                            <button type="submit" class="btn-whatsapp">
+                                <i class="fab fa-whatsapp"></i> Enviar por WhatsApp
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Botón para mostrar formulario -->
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="btn-whatsapp" onclick="mostrarFormulario()" style="padding: 15px 30px; font-size: 18px;">
+                    <i class="fab fa-whatsapp"></i> Proceder al Pago con WhatsApp
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2026 Bros Burger y Lomos. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="../javascript/main.js"></script>
+    <script>
+        // Actualizar carrito en la página
+        function actualizarCarrito() {
+            const items = carrito.obtener();
+
+            if (items.length === 0) {
+                document.getElementById('carrito-vacio').style.display = 'block';
+                document.getElementById('carrito-contenido').style.display = 'none';
+                return;
+            }
+
+            document.getElementById('carrito-vacio').style.display = 'none';
+            document.getElementById('carrito-contenido').style.display = 'block';
+
+            // Actualizar tabla
+            const tabla = document.getElementById('tabla-items');
+            tabla.innerHTML = items.map(item => `
+                <tr>
+                    <td>${item.emoji} ${item.nombre}</td>
+                    <td>$${item.precio.toFixed(2)}</td>
+                    <td>
+                        <div class="cantidad">
+                            <button type="button" onclick="disminuirCantidad('${item.id}')" style="width: 30px; padding: 5px; background: #ecf0f1; border: none; cursor: pointer;">-</button>
+                            <input type="number" value="${item.cantidad}" min="1" onchange="carrito.actualizar('${item.id}', parseInt(this.value)); actualizarCarrito();" style="width: 60px; text-align: center;">
+                            <button type="button" onclick="aumentarCantidad('${item.id}')" style="width: 30px; padding: 5px; background: #ecf0f1; border: none; cursor: pointer;">+</button>
+                        </div>
+                    </td>
+                    <td>$${(item.precio * item.cantidad).toFixed(2)}</td>
+                    <td>
+                        <button type="button" class="btn-eliminar" onclick="carrito.eliminar('${item.id}'); actualizarCarrito();">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+
+            // Actualizar totales
+            const subtotal = carrito.getTotal();
+            const delivery = document.getElementById('delivery') && document.getElementById('delivery').checked ? 500 : 0;
+            const total = subtotal + delivery;
+            
+            document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
+            document.getElementById('envio').textContent = delivery > 0 ? `$${delivery.toFixed(2)}` : 'Retiro en local';
+            document.getElementById('total').textContent = `$${total.toFixed(2)}`;
+        }
+
+        // Funciones de cantidad
+        function aumentarCantidad(id) {
+            const item = carrito.obtener().find(i => i.id === id);
+            if (item) {
+                carrito.actualizar(id, item.cantidad + 1);
+                actualizarCarrito();
+            }
+        }
+
+        function disminuirCantidad(id) {
+            const item = carrito.obtener().find(i => i.id === id);
+            if (item && item.cantidad > 1) {
+                carrito.actualizar(id, item.cantidad - 1);
+                actualizarCarrito();
+            }
+        }
+
+        // Vaciar carrito
+        function vaciarCarrito() {
+            if (confirm('¿Estás seguro de que deseas vaciar el carrito?')) {
+                carrito.vaciar();
+                actualizarCarrito();
+            }
+        }
+
+        // Mostrar formulario
+        function mostrarFormulario() {
+            if (carrito.obtener().length === 0) {
+                mostrarAlerta('⚠️ Tu carrito está vacío', 'error');
+                return;
+            }
+            document.querySelector('.formulario-cliente').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Enviar pedido
+        function enviarPedido(event) {
+            event.preventDefault();
+
+            const cliente = {
+                nombre: document.getElementById('nombre').value,
+                telefono: document.getElementById('telefono').value,
+                email: document.getElementById('email').value,
+                direccion: document.getElementById('direccion').value,
+                delivery: document.getElementById('delivery').checked,
+                notas: document.getElementById('notas').value
+            };
+
+            if (!cliente.nombre || !cliente.telefono) {
+                mostrarAlerta('⚠️ Por favor completa nombre y teléfono', 'error');
+                return;
+            }
+
+            if (carrito.obtener().length === 0) {
+                mostrarAlerta('⚠️ Tu carrito está vacío', 'error');
+                return;
+            }
+
+            // Enviar a WhatsApp
+            enviarPorWhatsApp(cliente);
+
+            // Limpiar formulario y carrito después de enviar
+            setTimeout(() => {
+                carrito.vaciar();
+                document.querySelector('form').reset();
+                actualizarCarrito();
+                mostrarAlerta('✓ Pedido enviado por WhatsApp. ¡Gracias por tu compra!', 'exito');
+            }, 500);
+        }
+
+        // Cargar carrito al iniciar
+        document.addEventListener('DOMContentLoaded', actualizarCarrito);
+    </script>
+</body>
+</html>

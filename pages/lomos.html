@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lomos - Bros Burger y Lomos</title>
+    <link rel="stylesheet" href="../styles/estilos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+<body>
+    <!-- Encabezado -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <img src="/files/logo_bros.jpeg" alt="Logo Bro's" class="logo-img">
+                <h1>Bro's Burger y Lomos</h1>
+            </div>
+            <div class="carrito-icon">
+                <a href="carrito.html" class="btn-carrito">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span id="contador-carrito" class="contador">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sección de productos -->
+    <div class="productos-header">
+        <div class="container">
+            <h1>🥪 Lomos</h1>
+            <p>Lomos 100% carne de lomo, tiernos y sabrosos</p>
+        </div>
+    </div>
+
+    <main class="container">
+        <a href="../index.html" class="btn-volver-inicio">← Volver al Inicio</a>
+        <div class="grid-productos" id="grid-lomos"></div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2026 Bros Burger y Lomos. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="../javascript/main.js"></script>
+    <script>
+        // Productos de lomos
+        const lomos = [
+            {
+                id: 'lomo1',
+                nombre: 'Lomo Completo',
+                descripcion: 'PAN DE LOMO DE 20CM, MAYONESA CASERA, BIFE DE LOMO DE 120GS, LECHUGA, TOMATE, JAMON, QUESO, HUEVO Y PAPAS FRITAS',
+                precio: 17000,
+                emoji: '🥪'
+            },
+            {
+                id: 'lomo2',
+                nombre: 'Lomo Americano',
+                descripcion: 'PAN DE LOMO DE 20CM, BIFE DE LOMO DE 120GS,  MAYONESA CASERA, CEBOLLA CARAMELIZADA, QUESO CHEDDAR, BACON, SALSA BBQ, HUEVO Y PAPAS FRITAS',
+                precio: 19000,
+                emoji: '🥪'
+            },
+            {
+                id: 'lomo3',
+                nombre: 'Lomo Azul',
+                descripcion: 'PAN DE LOMO DE 20CM, BIFE DE LOMO DE 120GS, MAYONESA CASERA, LECHUGA, TOMATE, QUESO TYBO, QUESO AZUL, HUEVO, JAMON Y PAPAS FRITAS',
+                precio: 19000,
+                emoji: '🥪'
+            },
+            {
+                id: 'lomo4',
+                nombre: 'Lomo Mex',
+                descripcion: 'PAN DE LOMO DE 20CM, MAYONESA CASERA, BIFE DE LOMO DE 120GS, PIMIENTOS SALTEADOS ( ROJO, VERDE, AMARILLO), SALSA PICANTE, CEBOLLA SALTEADA, BACON Y PAPAS FRITAS',
+                precio: 19000,
+                emoji: '🥪'
+            },
+            {
+                id: 'lomo5',
+                nombre: 'Lomo Vegetariano',
+                descripcion: 'PAN DE LOMO DE 20CM, BERENJENA SALTEADA, CEBOLLA SALTEADA, PIMIENTOS SALTEADOS (ROJO, AMARILLO Y VERDE), LECHUGA, TOMATE, HUEVO, QUESO TYBO Y PAPAS FRITAS',
+                precio: 14000,
+                emoji: '🥪'
+            },
+            {
+                id: 'bife-extra',
+                nombre: 'Bife Extra',
+                descripcion: 'Bife de lomo adicional de 120gs',
+                precio: 4500,
+                emoji: '🥩'
+            },
+        ];
+
+        // Renderizar productos
+        function renderizarProductos() {
+            const grid = document.getElementById('grid-lomos');
+            grid.innerHTML = lomos.map(lomo => `
+                <div class="producto-card">
+                    <div class="producto-imagen">${lomo.id === 'lomo1' ? '<img src="../files/Lomo completo.png" alt="Lomo Completo" style="width: 100%; height: 100%; object-fit: cover;">' : lomo.id === 'lomo2' ? '<img src="../files/Lomo_americano.png" alt="Lomo Americano" style="width: 100%; height: 100%; object-fit: cover;">' : lomo.id === 'lomo3' ? '<img src="../files/lomo_azul.png" alt="Lomo Azul" style="width: 100%; height: 100%; object-fit: cover;">' : lomo.id === 'lomo4' ? '<img src="../files/lomo_mex.png" alt="Lomo Mex" style="width: 100%; height: 100%; object-fit: cover;">' : lomo.id === 'lomo5' ? '<img src="../files/lomo_vegetariano.png" alt="Lomo Vegetariano" style="width: 100%; height: 100%; object-fit: cover;">' : lomo.emoji}</div>
+                    <div class="producto-info">
+                        <h3>${lomo.nombre}</h3>
+                        <p class="producto-descripcion">${lomo.descripcion}</p>
+                        <div class="producto-footer">
+                            <span class="producto-precio">$${lomo.precio.toFixed(2)}</span>
+                            <button class="btn-agregar" onclick="agregarAlCarrito({
+                                id: '${lomo.id}',
+                                nombre: '${lomo.nombre}',
+                                precio: ${lomo.precio},
+                                emoji: '${lomo.emoji}'
+                            })">
+                                <i class="fas fa-plus"></i> Agregar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        document.addEventListener('DOMContentLoaded', renderizarProductos);
+    </script>
+</body>
+</html>

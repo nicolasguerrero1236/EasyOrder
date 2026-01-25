@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hamburguesas - Bros Burger y Lomos</title>
+    <link rel="stylesheet" href="../styles/estilos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+<body>
+    <!-- Encabezado -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <img src="/files/logo_bros.jpeg" alt="Logo Bro's" class="logo-img">
+                <h1>Bro's Burger y Lomos</h1>
+            </div>
+            <div class="carrito-icon">
+                <a href="carrito.html" class="btn-carrito">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span id="contador-carrito" class="contador">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sección de productos -->
+    <div class="productos-header">
+        <div class="container">
+            <h1>🍔 Hamburguesas</h1>
+            <p>¡Hamburguesas caseras y jugosas!</p>
+        </div>
+    </div>
+
+    <main class="container">
+        <a href="../index.html" class="btn-volver-inicio">← Volver al Inicio</a>
+        <div class="grid-productos" id="grid-hamburguesas"></div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2026 Bros Burger y Lomos. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="../javascript/main.js"></script>
+    <script>
+        // Productos de hamburguesas
+        const hamburguesas = [
+            {
+                id: 'ham1',
+                nombre: 'Hamburguesa Clásica Simple',
+                descripcion: 'PAN DE PAPA,  MAYONESA CASERA MEDALLON DE CARNE DE 120GS,  QUESO CHEDDAR  Y PAPAS FRITAS',
+                precio: 9000,
+                emoji: '🍔'
+            },
+            {
+                id: 'ham2',
+                nombre: 'Hamburguesa Clasica Doble',
+                descripcion: 'PAN DE PAPA, MAYONESA CASERA, DOS MEDALLONES DE CARNE DE 120GS, QUESO CHEDDAR Y PAPAS FRITAS',
+                precio: 11500,
+                emoji: '🍔'
+            },
+            {
+                id: 'ham3',
+                nombre: 'Hamburguesa Clasica Triple',
+                descripcion: 'PAN DE PAPA, MAYONESA CASERA, TRES MEDALLONES DE CARNE DE 120GS, QUESO CHEDDAR Y PAPAS FRITAS',
+                precio: 14000,
+                emoji: '🍔'
+            },
+            {
+                id: 'ham4',
+                nombre: 'Hamburguesa Completa Simple',
+                descripcion: 'PAN DE PAPA, MAYONESA CASERA, MEDALLON DE CARNE DE 120GS, LECHUGA, TOMATE, HUEVO, QUESO DAMBO, JAMON, CEBOLLA MORADA, PEPINILLO Y PAPAS FRITAS',
+                precio: 13000,
+                emoji: '🍔'
+            },
+            {
+                id: 'ham5',
+                nombre: 'Hamburguesa Completa Doble',
+                descripcion: 'PAN DE PAPA, MAYONESA CASERA, DOS MEDALLONES DE CARNE DE 120GS, LECHUGA, TOMATE, HUEVO, QUESO DAMBO, JAMON, CEBOLLA MORADA, PEPINILLO Y PAPAS FRITAS',
+                precio: 15500,
+                emoji: '🍔',
+                imagen: '../files/hamburguesa_completa_doble.png'
+            },
+            {
+                id: 'ham6',
+                nombre: 'Hamburguesa Completa Triple',
+                descripcion: 'PAN DE PAPA, MAYONESA CASERA, TRES MEDALLONES DE CARNE DE 120GS, LECHUGA, TOMATE, HUEVO, QUESO DAMBO, JAMON, CEBOLLA MORADA, PEPINILLO Y PAPAS FRITAS',
+                precio: 18000,
+                emoji: '🍔',
+                imagen: '../files/hamburguesa_completa_triple.png'
+            },
+            {
+                id: 'ham7',
+                nombre: 'Hamburguesa Cheese Simple',
+                descripcion: 'PAN DE PAPA, SALSA TASTY, UN MEDALLON DE CARNE DE 120GS, CEBOLLA CARAMELIZADA, CHEDDAR , HUEVO Y PAPAS FRITAS',
+                precio: 13000,
+                emoji: '🍔',
+                imagen: '../files/hamburguesa_cheese_simple.png'
+            },
+            {
+                id: 'ham8',
+                nombre: 'Hamburguesa Cheese Doble',
+                descripcion: 'PAN DE PAPA, SALSA TASTY, DOS MEDALLONES DE CARNE DE 120GS, CEBOLLA CARAMELIZADA, CHEDDAR , HUEVO Y PAPAS FRITAS',
+                precio: 15500,
+                emoji: '🍔',
+                imagen: '../files/hamburguesa_cheese_doble.png'
+            },
+            {
+                id: 'ham9',
+                nombre: 'Hamburguesa Cheese Triple',
+                descripcion: 'PAN DE PAPA, SALSA TASTY, TRES MEDALLONES DE CARNE DE 120GS, CEBOLLA CARAMELIZADA, CHEDDAR , HUEVO Y PAPAS FRITAS',
+                precio: 18000,
+                emoji: '🍔',
+                imagen: '../files/hamburguesa_cheese_triple.png'
+            },
+            {
+                id: 'ham10',
+                nombre: 'Hamburguesa Americana simple',
+                descripcion: 'PAN DE PAPA, MAYONESA  CASERA, MEDALLON DE CARNE DE 120GS, CEBOLLA CARAMELIZADA, HUEVO, BACON , QUESO CHEDDAR, SALSA BBQ Y PAPAS FRITAS',
+                precio: 14000,
+                emoji: '🍔',
+                imagen: '../files/hamburguesa_americana_simple.png'
+            },
+            {
+                id: 'ham11',
+                nombre: 'Hamburguesa Americana Doble',
+                descripcion: 'PAN DE PAPA, MAYONESA  CASERA, DOS MEDALLONES DE CARNE DE 120GS, CEBOLLA CARAMELIZADA, HUEVO, BACON , QUESO CHEDDAR, SALSA BBQ Y PAPAS FRITAS',
+                precio: 16500,
+                emoji: '🍔',
+                imagen: '../files/hamburguesa_americana_doble.png'
+            },
+            {
+                id: 'ham12',
+                nombre: 'Hamburguesa Americana Triple',
+                descripcion: 'PAN DE PAPA, MAYONESA  CASERA, TRES MEDALLONES DE CARNE DE 120GS, CEBOLLA CARAMELIZADA, HUEVO, BACON , QUESO CHEDDAR, SALSA BBQ Y PAPAS FRITAS',
+                precio: 19000,
+                emoji: '🍔',
+                imagen: '../files/hamburguesa_americana_triple.png'
+            },
+            {
+                id: 'ham13',
+                nombre: 'Hamburguesa Provo Simple',
+                descripcion: 'PAN DE PAPA, MAYONESA CASERA, MEDALLON DE CARNE 120GS,  QUESO PROVOLETA, CEBOLLA CARAMELIZADA, CHIMICHURRI, HUEVO Y PAPAS FRITAS',
+                precio: 13500,
+                emoji: '🍔',
+                imagen: '../files/hamburguesa_provo_simple.png'
+            },
+            {
+                id: 'ham14',
+                nombre: 'Hamburguesa Provo Doble',
+                descripcion: 'PPAN DE PAPA, MAYONESA CASERA, DOS MEDALLONES DE CARNE 120GS,  QUESO PROVOLETA, CEBOLLA CARAMELIZADA, CHIMICHURRI, HUEVO Y PAPAS FRITAS',
+                precio: 16000,
+                emoji: '🍔',
+                imagen: '../files/hamburguesa_provo_doble.png'
+            },
+            {
+                id: 'ham15',
+                nombre: 'Hamburguesa Provo Triple',
+                descripcion: 'PAN DE PAPA, MAYONESA CASERA, TRES MEDALLON DE CARNE 120GS,  QUESO PROVOLETA, CEBOLLA CARAMELIZADA, CHIMICHURRI, HUEVO Y PAPAS FRITAS',
+                precio: 18500,
+                emoji: '🍔',
+                imagen: '../files/hamburguesa_provo_triple.png'
+            },
+            {
+                id: 'ham16',
+                nombre: 'Hamburguesa Mex Simple',
+                descripcion: 'PAN DE PAPA, MAYONESA CASERA, MEDALLON DE CARNE 120GS,  CEBOLLA SALTEADA, PIMIENTOS SALTEADOS ( ROJO, VERDE Y AMARILLO)  SALSA PICANTE, QUESO DAMBO Y PAPAS FRITAS',
+                precio: 12000,
+                emoji: '🍔',
+                imagen: '../files/hamburguesa_mex_simple.png'
+            },
+            {
+                id: 'ham17',
+                nombre: 'Hamburguesa Mex Doble',
+                descripcion: 'PAN DE PAPA, MAYONESA CASERA, DOS MEDALLONES DE CARNE 120GS,  CEBOLLA SALTEADA, PIMIENTOS SALTEADOS ( ROJO, VERDE Y AMARILLO)  SALSA PICANTE, QUESO DAMBO Y PAPAS FRITAS',
+                precio: 14500,
+                emoji: '🍔',
+                imagen: '../files/hamburguesa_mex_doble.png'
+            },
+            {
+                id: 'ham18',
+                nombre: 'Hamburguesa Mex Triple',
+                descripcion: 'PAN DE PAPA, MAYONESA CASERA, TRES MEDALLONES DE CARNE 120GS,  CEBOLLA SALTEADA, PIMIENTOS SALTEADOS ( ROJO, VERDE Y AMARILLO)  SALSA PICANTE, QUESO DAMBO Y PAPAS FRITAS',
+                precio: 17000,
+                emoji: '🍔',
+                imagen: '../files/hamburguesa_mex_triple.png'
+            },
+            {
+                id: 'ham19',
+                nombre: 'Hamburguesa Blue Simple',
+                descripcion: 'PAN DE PAPA, MEDALLON DE 120GS, MAYONESA CASERA, QUESO DAMBO, QUESO ROQUEFORT, LECHUGA, TOMATE, CEBOLLA MORADA, HUEVO, JAMON Y PAPAS FRITAS',
+                precio: 14000,
+                emoji: '🍔',
+                imagen: '../files/hamburguesa_blue_simple.png'
+            },
+            {
+                id: 'ham20',
+                nombre: 'Hamburguesa Blue Doble',
+                descripcion: 'PAN DE PAPA, DOS MEDALLONES DE 120GS, MAYONESA CASERA, QUESO DAMBO, QUESO ROQUEFORT, LECHUGA, TOMATE, CEBOLLA MORADA, HUEVO, JAMON Y PAPAS FRITAS',
+                precio: 16500,
+                emoji: '🍔',
+                imagen: '../files/hamburguesa_blue_doble.png'
+            },
+            {
+                id: 'ham21',
+                nombre: 'Hamburguesa Blue Triple',
+                descripcion: 'PAN DE PAPA, TRES MEDALLONES DE 120GS, MAYONESA CASERA, QUESO DAMBO, QUESO ROQUEFORT, LECHUGA, TOMATE, CEBOLLA MORADA, HUEVO, JAMON Y PAPAS FRITAS',
+                precio: 19000,
+                emoji: '🍔',
+                imagen: '../files/hamburguesa_blue_triple.png'
+            },
+            {
+                id: 'ham22',
+                nombre: 'Burger Gula Bros',
+                descripcion: 'PAN DE PAPA, MAYONESA BROS, CUATRO MEDALLONES DE CARNE DE 120 GS, CUATRO CHEDDAR, CEBOLLA SALTEADA, PIMIENTOS SALTEADOS ( ROJO, VERDE Y AMARILLO), DOBLE HUEVO, DOBLE JAMON Y PAPAS FRITAS',
+                precio: 19000,
+                emoji: '🍔',
+                imagen: '../files/hamburguesa_gulabros.png'
+            },
+        ];
+
+        // Renderizar productos
+        function renderizarProductos() {
+            const grid = document.getElementById('grid-hamburguesas');
+            grid.innerHTML = hamburguesas.map(ham => `
+                <div class="producto-card">
+                    <div class="producto-imagen">${ham.id === 'ham1' ? '<img src="../files/hamburguesa_clasica_simple.png" alt="Hamburguesa Clásica Simple" style="width: 100%; height: 100%; object-fit: cover;">' : ham.id === 'ham2' ? '<img src="../files/hamburguesa_clasica_doble.png" alt="Hamburguesa Clásica Doble" style="width: 100%; height: 100%; object-fit: cover;">' : ham.id === 'ham3' ? '<img src="../files/hamburguesa_clasica_triple.png" alt="Hamburguesa Clásica Triple" style="width: 100%; height: 100%; object-fit: cover;">' : ham.id === 'ham4' ? '<img src="../files/hamburguesa_completa_simple.png" alt="Hamburguesa Completa Simple" style="width: 100%; height: 100%; object-fit: cover;">' : ham.id === 'ham5' ? '<img src="../files/hamburguesa_completa_doble.png" alt="Hamburguesa Completa Doble" style="width: 100%; height: 100%; object-fit: cover;">' : ham.id === 'ham6' ? '<img src="../files/hamburguesa_completa_triple.png" alt="Hamburguesa Completa Triple" style="width: 100%; height: 100%; object-fit: cover;">' : ham.id === 'ham7' ? '<img src="../files/hamburguesa_cheese_simple.png" alt="Hamburguesa Cheese Simple" style="width: 100%; height: 100%; object-fit: cover;">' : ham.id === 'ham8' ? '<img src="../files/hamburguesa_cheese_doble.png" alt="Hamburguesa Cheese Doble" style="width: 100%; height: 100%; object-fit: cover;">' : ham.id === 'ham9' ? '<img src="../files/hamburguesa_cheese_triple.png" alt="Hamburguesa Cheese Triple" style="width: 100%; height: 100%; object-fit: cover;">' : ham.id === 'ham10' ? '<img src="../files/hamburguesa_americana_simple.png" alt="Hamburguesa Americana Simple" style="width: 100%; height: 100%; object-fit: cover;">' : ham.id === 'ham11' ? '<img src="../files/hamburguesa_americana_doble.png" alt="Hamburguesa Americana Doble" style="width: 100%; height: 100%; object-fit: cover;">' : ham.id === 'ham12' ? '<img src="../files/hamburguesa_americana_triple.png" alt="Hamburguesa Americana Triple" style="width: 100%; height: 100%; object-fit: cover;">' : ham.id === 'ham13' ? '<img src="../files/hamburguesa_provo_simple.png" alt="Hamburguesa Provo Simple" style="width: 100%; height: 100%; object-fit: cover;">' : ham.id === 'ham14' ? '<img src="../files/hamburguesa_provo_doble.png" alt="Hamburguesa Provo Doble" style="width: 100%; height: 100%; object-fit: cover;">' : ham.id === 'ham15' ? '<img src="../files/hamburguesa_provo_triple.png" alt="Hamburguesa Provo Triple" style="width: 100%; height: 100%; object-fit: cover;">' : ham.id === 'ham16' ? '<img src="../files/hamburguesa_mex_simple.png" alt="Hamburguesa Mex Simple" style="width: 100%; height: 100%; object-fit: cover;">' : ham.id === 'ham17' ? '<img src="../files/hamburguesa_mex_doble.png" alt="Hamburguesa Mex Doble" style="width: 100%; height: 100%; object-fit: cover;">' : ham.id === 'ham18' ? '<img src="../files/hamburguesa_mex_triple.png" alt="Hamburguesa Mex Triple" style="width: 100%; height: 100%; object-fit: cover;">' : ham.id === 'ham19' ? '<img src="../files/hamburguesa_blue_simple.png" alt="Hamburguesa Blue Simple" style="width: 100%; height: 100%; object-fit: cover;">' : ham.id === 'ham20' ? '<img src="../files/hamburguesa_blue_doble.png" alt="Hamburguesa Blue Doble" style="width: 100%; height: 100%; object-fit: cover;">' : ham.id === 'ham21' ? '<img src="../files/hamburguesa_blue_triple.png" alt="Hamburguesa Blue Triple" style="width: 100%; height: 100%; object-fit: cover;">' : ham.id === 'ham22' ? '<img src="../files/hamburguesa_gulabros.png" alt="La Gula Bros" style="width: 100%; height: 100%; object-fit: cover;">' : ham.emoji}</div>
+                    <div class="producto-info">
+                        <h3>${ham.nombre}</h3>
+                        <p class="producto-descripcion">${ham.descripcion}</p>
+                        <div class="producto-footer">
+                            <span class="producto-precio">$${ham.precio.toFixed(2)}</span>
+                            <button class="btn-agregar" onclick="agregarAlCarrito({
+                                id: '${ham.id}',
+                                nombre: '${ham.nombre}',
+                                precio: ${ham.precio},
+                                emoji: '${ham.emoji}'
+                            })">
+                                <i class="fas fa-plus"></i> Agregar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        document.addEventListener('DOMContentLoaded', renderizarProductos);
+    </script>
+</body>
+</html>
