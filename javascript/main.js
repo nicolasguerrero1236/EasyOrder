@@ -1,6 +1,6 @@
 // Configuración del sistema
 const CONFIG = {
-    WHATSAPP_NUMBER: '3512208096',
+    WHATSAPP_NUMBER: '543518697090',
     NEGOCIO: 'Bros Burger y Lomos'
 };
 
