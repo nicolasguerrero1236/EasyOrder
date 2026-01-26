@@ -640,12 +640,22 @@ textarea {
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
+    .logo {
+        gap: 10px;
+    }
+
+    .logo-img {
+        width: 60px;
+        height: 60px;
+    }
+
     .logo h1 {
-        font-size: 20px;
+        font-size: 18px;
+        margin-bottom: 2px;
     }
 
     .logo p {
-        font-size: 12px;
+        font-size: 10px;
     }
 
     .grid-categorias,
@@ -654,25 +664,182 @@ textarea {
     }
 
     .productos-header h1 {
-        font-size: 28px;
+        font-size: 24px;
     }
 
+    /* Tabla responsiva - Carrito */
+    .carrito-container {
+        padding: 15px;
+        overflow-x: auto;
+    }
+
+    .tabla-carrito {
+        font-size: 12px;
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .tabla-carrito thead {
+        display: none;
+    }
+
+    .tabla-carrito tbody {
+        display: block;
+    }
+
+    .tabla-carrito tr {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-bottom: 15px;
+        padding: 10px;
+        border: 1px solid var(--color-light);
+        border-radius: 5px;
+        background: #fafafa;
+    }
+
+    .tabla-carrito td {
+        padding: 8px;
+        font-size: 12px;
+        word-break: break-word;
+    }
+
+    .tabla-carrito td:nth-child(1) {
+        grid-column: 1 / -1;
+        font-weight: bold;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 10px;
+    }
+
+    .tabla-carrito td:nth-child(2)::before {
+        content: "Precio: ";
+        font-weight: bold;
+    }
+
+    .tabla-carrito td:nth-child(3)::before {
+        content: "Cantidad: ";
+        font-weight: bold;
+    }
+
+    .tabla-carrito td:nth-child(4)::before {
+        content: "Subtotal: ";
+        font-weight: bold;
+    }
+
+    .tabla-carrito td:nth-child(5) {
+        grid-column: 1 / -1;
+        text-align: center;
+    }
+
+    .tabla-carrito .cantidad {
+        display: flex;
+        gap: 5px;
+        align-items: center;
+    }
+
+    .tabla-carrito .cantidad button {
+        padding: 4px 8px;
+        font-size: 11px;
+    }
+
+    .tabla-carrito .cantidad input {
+        width: 40px;
+        padding: 4px;
+        font-size: 12px;
+    }
+
+    .btn-eliminar {
+        padding: 6px 12px !important;
+        font-size: 12px !important;
+    }
+
+    /* Resumen responsive */
+    .carrito-resumen {
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+
+    .resumen-item {
+        padding: 8px 0;
+        font-size: 14px;
+    }
+
+    .resumen-item.total {
+        font-size: 16px;
+    }
+
+    /* Botones */
     .carrito-acciones {
         flex-direction: column;
+        gap: 10px;
+        flex-wrap: wrap;
     }
 
     .carrito-acciones a,
     .carrito-acciones button {
+        flex: 1 1 100%;
         min-width: 100%;
-    }
-
-    table {
+        padding: 12px 15px;
         font-size: 14px;
     }
 
-    .tabla-carrito th,
-    .tabla-carrito td {
-        padding: 10px;
+    .btn-vaciar-anim {
+        width: 45px;
+        height: 45px;
+    }
+
+    .btn-vaciar-anim .vaciar-icon {
+        width: 12px;
+    }
+
+    .btn-vaciar-anim:hover {
+        width: 130px;
+    }
+
+    /* Formulario responsive */
+    .formulario-cliente {
+        padding: 15px;
+    }
+
+    .formulario-cliente h2 {
+        font-size: 18px;
+    }
+
+    input[type="text"],
+    input[type="tel"],
+    input[type="email"],
+    textarea {
+        font-size: 16px;
+        padding: 12px;
+        margin-bottom: 12px;
+    }
+
+    .delivery-toggle {
+        display: flex !important;
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+
+    .checkbox-container {
+        gap: 10px !important;
+    }
+
+    .checkbox-text {
+        font-size: 14px;
+        white-space: nowrap;
+    }
+
+    /* Grid buttons en formulario */
+    div[style*="display: grid"] {
+        grid-template-columns: 1fr !important;
+    }
+
+    .btn-secondary,
+    .btn-whatsapp {
+        width: 100%;
+        padding: 12px 15px;
     }
 }
 
