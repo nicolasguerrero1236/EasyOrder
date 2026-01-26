@@ -75,8 +75,10 @@
                     <a href="../index.html" class="btn-continuar">
                         <i class="fas fa-arrow-left"></i> Continuar Comprando
                     </a>
-                    <button class="btn-primary" onclick="vaciarCarrito()" style="background-color: #95a5a6;">
-                        <i class="fas fa-trash"></i> Vaciar Carrito
+                    <button class="btn-vaciar-anim" onclick="vaciarCarrito()" aria-label="Vaciar carrito">
+                        <svg viewBox="0 0 448 512" class="vaciar-icon">
+                            <path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"></path>
+                        </svg>
                     </button>
                 </div>
             </div>
@@ -91,10 +93,27 @@
                         <input type="email" id="email" placeholder="Tu email (opcional)">
                         <input type="text" id="direccion" placeholder="Dirección de entrega/retiro (opcional)">
                         
-                        <div style="display: flex; align-items: center; gap: 10px; padding: 10px; background: #f8f9fa; border-radius: 5px; margin: 10px 0;">
-                            <input type="checkbox" id="delivery" onchange="actualizarCarrito()" style="width: 20px; height: 20px; cursor: pointer;">
-                            <label for="delivery" style="cursor: pointer; margin: 0;">🚚 Delivery (+$500)</label>
-                        </div>
+                                                <div class="delivery-toggle">
+                                                        <div class="checkbox-container">
+                                                            <label class="ios-checkbox red">
+                                                                <input type="checkbox" id="delivery" onchange="actualizarCarrito()" />
+                                                                <div class="checkbox-wrapper">
+                                                                    <div class="checkbox-bg"></div>
+                                                                    <svg class="checkbox-icon" viewBox="0 0 24 24" fill="none">
+                                                                        <path
+                                                                            class="check-path"
+                                                                            d="M4 12L10 18L20 6"
+                                                                            stroke="currentColor"
+                                                                            stroke-width="3"
+                                                                            stroke-linecap="round"
+                                                                            stroke-linejoin="round"
+                                                                        ></path>
+                                                                    </svg>
+                                                                </div>
+                                                            </label>
+                                                            <span class="checkbox-text">🚚 Delivery (+$500)</span>
+                                                        </div>
+                                                </div>
                         
                         <textarea id="notas" placeholder="Notas especiales (ej: Sin cebolla, sin mayo, etc.)"></textarea>
                         

@@ -259,6 +259,58 @@ main {
     transform: scale(1.05);
 }
 
+/* Botón animado: vaciar carrito */
+.btn-vaciar-anim {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #141414;
+    border: none;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.16);
+    cursor: pointer;
+    transition: all 0.3s;
+    overflow: hidden;
+    position: relative;
+}
+
+.btn-vaciar-anim .vaciar-icon {
+    width: 14px;
+    transition: all 0.3s;
+}
+
+.btn-vaciar-anim .vaciar-icon path { fill: #ffffff; }
+
+.btn-vaciar-anim::before {
+    position: absolute;
+    top: -20px;
+    content: "Vaciar";
+    color: #ffffff;
+    transition: all 0.3s;
+    font-size: 2px;
+}
+
+.btn-vaciar-anim:hover {
+    width: 150px;
+    border-radius: 50px;
+    background-color: #ff4545;
+    align-items: center;
+}
+
+.btn-vaciar-anim:hover .vaciar-icon {
+    width: 50px;
+    transform: translateY(60%);
+}
+
+.btn-vaciar-anim:hover::before {
+    font-size: 13px;
+    opacity: 1;
+    transform: translateY(30px);
+}
+
 /* BOTONES Y INPUTS */
 .btn-primary {
     background-color: var(--color-primary);
@@ -398,6 +450,99 @@ textarea {
     margin-bottom: 10px;
     padding: 10px 0;
 }
+
+/* DELIVERY TOGGLE - Custom checkbox */
+/* DELIVERY TOGGLE - iOS style checkbox */
+.delivery-toggle { margin: 10px 0; }
+
+/* From Uiverse.io by Tsiangana */
+.checkbox-container {
+    display: flex;
+    gap: 20px;
+    padding: 10px;
+    background: #f8fafc;
+    border-radius: 12px;
+    box-shadow:
+        0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        0 2px 4px -2px rgba(0, 0, 0, 0.05);
+}
+
+.ios-checkbox {
+    --checkbox-size: 28px;
+    --checkbox-color: #3b82f6;
+    --checkbox-bg: #dbeafe;
+    --checkbox-border: #93c5fd;
+
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.ios-checkbox input { display: none; }
+
+.checkbox-wrapper {
+    position: relative;
+    width: var(--checkbox-size);
+    height: var(--checkbox-size);
+    border-radius: 8px;
+    transition: transform 0.2s ease;
+}
+
+.checkbox-bg {
+    position: absolute;
+    inset: 0;
+    border-radius: 8px;
+    border: 2px solid var(--checkbox-border);
+    background: white;
+    transition: all 0.2s ease;
+}
+
+.checkbox-icon {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: 80%;
+    height: 80%;
+    color: white;
+    transform: scale(0);
+    transition: all 0.2s ease;
+}
+
+.check-path {
+    stroke-dasharray: 40;
+    stroke-dashoffset: 40;
+    transition: stroke-dashoffset 0.3s ease 0.1s;
+}
+
+.ios-checkbox input:checked + .checkbox-wrapper .checkbox-bg {
+    background: var(--checkbox-color);
+    border-color: var(--checkbox-color);
+}
+
+.ios-checkbox input:checked + .checkbox-wrapper .checkbox-icon { transform: scale(1); }
+.ios-checkbox input:checked + .checkbox-wrapper .check-path { stroke-dashoffset: 0; }
+
+.ios-checkbox:hover .checkbox-wrapper { transform: scale(1.05); }
+.ios-checkbox:active .checkbox-wrapper { transform: scale(0.95); }
+
+.ios-checkbox input:focus + .checkbox-wrapper .checkbox-bg { box-shadow: 0 0 0 4px var(--checkbox-bg); }
+
+.ios-checkbox.red {
+    --checkbox-color: #ef4444;
+    --checkbox-bg: #fee2e2;
+    --checkbox-border: #fca5a5;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.ios-checkbox input:checked + .checkbox-wrapper { animation: bounce 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+
+.checkbox-text { font-size: 16px; color: var(--color-text); }
 
 .resumen-item.total {
     border-top: 2px solid var(--color-primary);
