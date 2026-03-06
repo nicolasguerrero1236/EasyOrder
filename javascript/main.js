@@ -1,7 +1,75 @@
 const CONFIG = {
     WHATSAPP_NUMBER: '543518697090',
-    NEGOCIO: 'Bros Burger y Lomos'
+    NEGOCIO: 'Bros Burger y Lomos',
+    COSTO_DELIVERY: 500
 };
+
+const STORAGE_CLIENTE_KEY = 'datos_cliente';
+let sweetAlertPromise = null;
+
+function obtenerRutaConfig() {
+    return window.location.pathname.includes('/pages/') ? '../files/config.json' : 'files/config.json';
+}
+
+function obtenerRutaProductos() {
+    return window.location.pathname.includes('/pages/') ? '../files/productos.json' : 'files/productos.json';
+}
+
+async function cargarConfiguracion() {
+    try {
+        const respuesta = await fetch(obtenerRutaConfig(), { cache: 'no-store' });
+        if (!respuesta.ok) return;
+        const configRemota = await respuesta.json();
+        Object.assign(CONFIG, configRemota);
+    } catch {
+    }
+}
+
+async function cargarProductos() {
+    try {
+        const respuesta = await fetch(obtenerRutaProductos(), { cache: 'no-store' });
+        if (!respuesta.ok) return;
+        const datos = await respuesta.json();
+
+        if (Array.isArray(datos.hamburguesas)) hamburguesas = datos.hamburguesas;
+        if (Array.isArray(datos.lomos)) lomos = datos.lomos;
+        if (Array.isArray(datos.sandwiches)) sandwiches = datos.sandwiches;
+        if (Array.isArray(datos.pizzas)) pizzas = datos.pizzas;
+        if (Array.isArray(datos.papas)) papas = datos.papas;
+        if (Array.isArray(datos.empanadas)) empanadas = datos.empanadas;
+        if (Array.isArray(datos.vegetarianos)) vegetarianos = datos.vegetarianos;
+        if (Array.isArray(datos.aderezos)) aderezos = datos.aderezos;
+        if (Array.isArray(datos.bebidas)) bebidas = datos.bebidas;
+        if (Array.isArray(datos.wraps)) wraps = datos.wraps;
+        if (Array.isArray(datos.promos)) promos = datos.promos;
+    } catch {
+    }
+}
+
+function obtenerCostoDelivery() {
+    const costo = Number(CONFIG.COSTO_DELIVERY);
+    return Number.isFinite(costo) ? costo : 500;
+}
+
+function cargarSweetAlert() {
+    if (window.Swal) {
+        return Promise.resolve(window.Swal);
+    }
+
+    if (sweetAlertPromise) {
+        return sweetAlertPromise;
+    }
+
+    sweetAlertPromise = new Promise((resolve) => {
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
+        script.onload = () => resolve(window.Swal || null);
+        script.onerror = () => resolve(null);
+        document.head.appendChild(script);
+    });
+
+    return sweetAlertPromise;
+}
 
 class Carrito {
     constructor() {
@@ -106,7 +174,7 @@ function generarMensajeWhatsApp(cliente) {
     mensaje += `📱 Teléfono: ${cliente.telefono}\n`;
     if (cliente.email) mensaje += `📧 Email: ${cliente.email}\n`;
     if (cliente.direccion) mensaje += `🏠 Dirección: ${cliente.direccion}\n`;
-    mensaje += `🚚 Modalidad: ${cliente.delivery ? 'Delivery (+$500)' : 'Retiro en local'}\n`;
+    mensaje += `🚚 Modalidad: ${cliente.delivery ? `Delivery (+$${obtenerCostoDelivery()})` : 'Retiro en local'}\n`;
     if (cliente.notas) mensaje += `📝 Notas: ${cliente.notas}\n`;
     mensaje += `\n*PEDIDO:*\n`;
     mensaje += `${'='.repeat(40)}\n`;
@@ -118,7 +186,7 @@ function generarMensajeWhatsApp(cliente) {
 
     mensaje += `${'='.repeat(40)}\n`;
     const subtotal = carrito.getTotal();
-    const delivery = cliente.delivery ? 500 : 0;
+    const delivery = cliente.delivery ? obtenerCostoDelivery() : 0;
     const total = subtotal + delivery;
     
     if (delivery > 0) {
@@ -138,808 +206,27 @@ function enviarPorWhatsApp(cliente) {
     window.open(url, '_blank');
 }
 
-const hamburguesas = [
-    {
-        id: 'ham1',
-        nombre: 'Hamburguesa Clásica Simple',
-        descripcion: 'PAN DE PAPA,  MAYONESA CASERA MEDALLON DE CARNE DE 120GS,  QUESO CHEDDAR  Y PAPAS FRITAS',
-        precio: 9000,
-        emoji: '🍔'
-    },
-    {
-        id: 'ham2',
-        nombre: 'Hamburguesa Clasica Doble',
-        descripcion: 'PAN DE PAPA, MAYONESA CASERA, DOS MEDALLONES DE CARNE DE 120GS, QUESO CHEDDAR Y PAPAS FRITAS',
-        precio: 11500,
-        emoji: '🍔'
-    },
-    {
-        id: 'ham3',
-        nombre: 'Hamburguesa Clasica Triple',
-        descripcion: 'PAN DE PAPA, MAYONESA CASERA, TRES MEDALLONES DE CARNE DE 120GS, QUESO CHEDDAR Y PAPAS FRITAS',
-        precio: 14000,
-        emoji: '🍔'
-    },
-    {
-        id: 'ham4',
-        nombre: 'Hamburguesa Completa Simple',
-        descripcion: 'PAN DE PAPA, MAYONESA CASERA, MEDALLON DE CARNE DE 120GS, LECHUGA, TOMATE, HUEVO, QUESO DAMBO, JAMON, CEBOLLA MORADA, PEPINILLO Y PAPAS FRITAS',
-        precio: 13000,
-        emoji: '🍔'
-    },
-    {
-        id: 'ham5',
-        nombre: 'Hamburguesa Completa Doble',
-        descripcion: 'PAN DE PAPA, MAYONESA CASERA, DOS MEDALLONES DE CARNE DE 120GS, LECHUGA, TOMATE, HUEVO, QUESO DAMBO, JAMON, CEBOLLA MORADA, PEPINILLO Y PAPAS FRITAS',
-        precio: 15500,
-        emoji: '🍔',
-        imagen: '../files/hamburguesa_completa_doble.png'
-    },
-    {
-        id: 'ham6',
-        nombre: 'Hamburguesa Completa Triple',
-        descripcion: 'PAN DE PAPA, MAYONESA CASERA, TRES MEDALLONES DE CARNE DE 120GS, LECHUGA, TOMATE, HUEVO, QUESO DAMBO, JAMON, CEBOLLA MORADA, PEPINILLO Y PAPAS FRITAS',
-        precio: 18000,
-        emoji: '🍔',
-        imagen: '../files/hamburguesa_completa_triple.png'
-    },
-    {
-        id: 'ham7',
-        nombre: 'Hamburguesa Cheese Simple',
-        descripcion: 'PAN DE PAPA, SALSA TASTY, UN MEDALLON DE CARNE DE 120GS, CEBOLLA CARAMELIZADA, CHEDDAR , HUEVO Y PAPAS FRITAS',
-        precio: 13000,
-        emoji: '🍔',
-        imagen: '../files/hamburguesa_cheese_simple.png'
-    },
-    {
-        id: 'ham8',
-        nombre: 'Hamburguesa Cheese Doble',
-        descripcion: 'PAN DE PAPA, SALSA TASTY, DOS MEDALLONES DE CARNE DE 120GS, CEBOLLA CARAMELIZADA, CHEDDAR , HUEVO Y PAPAS FRITAS',
-        precio: 15500,
-        emoji: '🍔',
-        imagen: '../files/hamburguesa_cheese_doble.png'
-    },
-    {
-        id: 'ham9',
-        nombre: 'Hamburguesa Cheese Triple',
-        descripcion: 'PAN DE PAPA, SALSA TASTY, TRES MEDALLONES DE CARNE DE 120GS, CEBOLLA CARAMELIZADA, CHEDDAR , HUEVO Y PAPAS FRITAS',
-        precio: 18000,
-        emoji: '🍔',
-        imagen: '../files/hamburguesa_cheese_triple.png'
-    },
-    {
-        id: 'ham10',
-        nombre: 'Hamburguesa Americana simple',
-        descripcion: 'PAN DE PAPA, MAYONESA  CASERA, MEDALLON DE CARNE DE 120GS, CEBOLLA CARAMELIZADA, HUEVO, BACON , QUESO CHEDDAR, SALSA BBQ Y PAPAS FRITAS',
-        precio: 14000,
-        emoji: '🍔',
-        imagen: '../files/hamburguesa_americana_simple.png'
-    },
-    {
-        id: 'ham11',
-        nombre: 'Hamburguesa Americana Doble',
-        descripcion: 'PAN DE PAPA, MAYONESA  CASERA, DOS MEDALLONES DE CARNE DE 120GS, CEBOLLA CARAMELIZADA, HUEVO, BACON , QUESO CHEDDAR, SALSA BBQ Y PAPAS FRITAS',
-        precio: 16500,
-        emoji: '🍔',
-        imagen: '../files/hamburguesa_americana_doble.png'
-    },
-    {
-        id: 'ham12',
-        nombre: 'Hamburguesa Americana Triple',
-        descripcion: 'PAN DE PAPA, MAYONESA  CASERA, TRES MEDALLONES DE CARNE DE 120GS, CEBOLLA CARAMELIZADA, HUEVO, BACON , QUESO CHEDDAR, SALSA BBQ Y PAPAS FRITAS',
-        precio: 19000,
-        emoji: '🍔',
-        imagen: '../files/hamburguesa_americana_triple.png'
-    },
-    {
-        id: 'ham13',
-        nombre: 'Hamburguesa Provo Simple',
-        descripcion: 'PAN DE PAPA, MAYONESA CASERA, MEDALLON DE CARNE 120GS,  QUESO PROVOLETA, CEBOLLA CARAMELIZADA, CHIMICHURRI, HUEVO Y PAPAS FRITAS',
-        precio: 13500,
-        emoji: '🍔',
-        imagen: '../files/hamburguesa_provo_simple.png'
-    },
-    {
-        id: 'ham14',
-        nombre: 'Hamburguesa Provo Doble',
-        descripcion: 'PPAN DE PAPA, MAYONESA CASERA, DOS MEDALLONES DE CARNE 120GS,  QUESO PROVOLETA, CEBOLLA CARAMELIZADA, CHIMICHURRI, HUEVO Y PAPAS FRITAS',
-        precio: 16000,
-        emoji: '🍔',
-        imagen: '../files/hamburguesa_provo_doble.png'
-    },
-    {
-        id: 'ham15',
-        nombre: 'Hamburguesa Provo Triple',
-        descripcion: 'PAN DE PAPA, MAYONESA CASERA, TRES MEDALLON DE CARNE 120GS,  QUESO PROVOLETA, CEBOLLA CARAMELIZADA, CHIMICHURRI, HUEVO Y PAPAS FRITAS',
-        precio: 18500,
-        emoji: '🍔',
-        imagen: '../files/hamburguesa_provo_triple.png'
-    },
-    {
-        id: 'ham16',
-        nombre: 'Hamburguesa Mex Simple',
-        descripcion: 'PAN DE PAPA, MAYONESA CASERA, MEDALLON DE CARNE 120GS,  CEBOLLA SALTEADA, PIMIENTOS SALTEADOS ( ROJO, VERDE Y AMARILLO)  SALSA PICANTE, QUESO DAMBO Y PAPAS FRITAS',
-        precio: 12000,
-        emoji: '🍔',
-        imagen: '../files/hamburguesa_mex_simple.png'
-    },
-    {
-        id: 'ham17',
-        nombre: 'Hamburguesa Mex Doble',
-        descripcion: 'PAN DE PAPA, MAYONESA CASERA, DOS MEDALLONES DE CARNE 120GS,  CEBOLLA SALTEADA, PIMIENTOS SALTEADOS ( ROJO, VERDE Y AMARILLO)  SALSA PICANTE, QUESO DAMBO Y PAPAS FRITAS',
-        precio: 14500,
-        emoji: '🍔',
-        imagen: '../files/hamburguesa_mex_doble.png'
-    },
-    {
-        id: 'ham18',
-        nombre: 'Hamburguesa Mex Triple',
-        descripcion: 'PAN DE PAPA, MAYONESA CASERA, TRES MEDALLONES DE CARNE 120GS,  CEBOLLA SALTEADA, PIMIENTOS SALTEADOS ( ROJO, VERDE Y AMARILLO)  SALSA PICANTE, QUESO DAMBO Y PAPAS FRITAS',
-        precio: 17000,
-        emoji: '🍔',
-        imagen: '../files/hamburguesa_mex_triple.png'
-    },
-    {
-        id: 'ham19',
-        nombre: 'Hamburguesa Blue Simple',
-        descripcion: 'PAN DE PAPA, MEDALLON DE 120GS, MAYONESA CASERA, QUESO DAMBO, QUESO ROQUEFORT, LECHUGA, TOMATE, CEBOLLA MORADA, HUEVO, JAMON Y PAPAS FRITAS',
-        precio: 14000,
-        emoji: '🍔',
-        imagen: '../files/hamburguesa_blue_simple.png'
-    },
-    {
-        id: 'ham20',
-        nombre: 'Hamburguesa Blue Doble',
-        descripcion: 'PAN DE PAPA, DOS MEDALLONES DE 120GS, MAYONESA CASERA, QUESO DAMBO, QUESO ROQUEFORT, LECHUGA, TOMATE, CEBOLLA MORADA, HUEVO, JAMON Y PAPAS FRITAS',
-        precio: 16500,
-        emoji: '🍔',
-        imagen: '../files/hamburguesa_blue_doble.png'
-    },
-    {
-        id: 'ham21',
-        nombre: 'Hamburguesa Blue Triple',
-        descripcion: 'PAN DE PAPA, TRES MEDALLONES DE 120GS, MAYONESA CASERA, QUESO DAMBO, QUESO ROQUEFORT, LECHUGA, TOMATE, CEBOLLA MORADA, HUEVO, JAMON Y PAPAS FRITAS',
-        precio: 19000,
-        emoji: '🍔',
-        imagen: '../files/hamburguesa_blue_triple.png'
-    },
-    {
-        id: 'ham22',
-        nombre: 'Burger Gula Bros',
-        descripcion: 'PAN DE PAPA, MAYONESA BROS, CUATRO MEDALLONES DE CARNE DE 120 GS, CUATRO CHEDDAR, CEBOLLA SALTEADA, PIMIENTOS SALTEADOS ( ROJO, VERDE Y AMARILLO), DOBLE HUEVO, DOBLE JAMON Y PAPAS FRITAS',
-        precio: 19000,
-        emoji: '🍔',
-        imagen: '../files/hamburguesa_gulabros.png'
-    },
-];
+let hamburguesas = [];
 
-const lomos = [
-    {
-        id: 'lomo1',
-        nombre: 'Lomo Completo',
-        descripcion: 'PAN DE LOMO DE 20CM, MAYONESA CASERA, BIFE DE LOMO DE 120GS, LECHUGA, TOMATE, JAMON, QUESO, HUEVO Y PAPAS FRITAS',
-        precio: 17000,
-        emoji: '🥪'
-    },
-    {
-        id: 'lomo2',
-        nombre: 'Lomo Americano',
-        descripcion: 'PAN DE LOMO DE 20CM, BIFE DE LOMO DE 120GS,  MAYONESA CASERA, CEBOLLA CARAMELIZADA, QUESO CHEDDAR, BACON, SALSA BBQ, HUEVO Y PAPAS FRITAS',
-        precio: 19000,
-        emoji: '🥪'
-    },
-    {
-        id: 'lomo3',
-        nombre: 'Lomo Azul',
-        descripcion: 'PAN DE LOMO DE 20CM, BIFE DE LOMO DE 120GS, MAYONESA CASERA, LECHUGA, TOMATE, QUESO TYBO, QUESO AZUL, HUEVO, JAMON Y PAPAS FRITAS',
-        precio: 19000,
-        emoji: '🥪'
-    },
-    {
-        id: 'lomo4',
-        nombre: 'Lomo Mex',
-        descripcion: 'PAN DE LOMO DE 20CM, MAYONESA CASERA, BIFE DE LOMO DE 120GS, PIMIENTOS SALTEADOS ( ROJO, VERDE, AMARILLO), SALSA PICANTE, CEBOLLA SALTEADA Y PAPAS FRITAS',
-        precio: 19000,
-        emoji: '🥪'
-    },
-    {
-        id: 'lomo5',
-        nombre: 'Lomo Vegetariano',
-        descripcion: 'PAN DE LOMO DE 20CM, BERENJENA SALTEADA, CEBOLLA SALTEADA, PIMIENTOS SALTEADOS (ROJO, AMARILLO Y VERDE), LECHUGA, TOMATE, HUEVO, QUESO TYBO Y PAPAS FRITAS',
-        precio: 14000,
-        emoji: '🥪'
-    },
-    {
-        id: 'bife-extra',
-        nombre: 'Bife Extra',
-        descripcion: 'Bife de lomo adicional de 120gs',
-        precio: 4000,
-        emoji: '🥩'
-    },
-];
+let lomos = [];
 
-const sandwiches = [
-    {
-        id: 'sand1',
-        nombre: 'Hamburlomo',
-        descripcion: 'PAN DE LOMO, MEDALLON DE 240GS, MAYONESA, CASERA, LECHUGA, TOMATE, JAMON, QUESO DAMBO, HUEVO, ACOMPAÑADO DE PAPAS FRITAS',
-        precio: 12500,
-        emoji: '🥖',
-        imagen: '../files/hamburlomo.png'
-    },
-    {
-        id: 'sand2',
-        nombre: 'Sandwich de Milanesa',
-        descripcion: 'PAN DE LOMO, MILANESA DE CARNE, MAYONESA CASERA, LECHUGA, TOMATE, JAMON, QUESO DAMBO, HUEVO Y PAPAS FRITAS',
-        precio: 13000,
-        emoji: '🥖'
-    },
-    {
-        id: 'sand3',
-        nombre: 'Tostado',
-        descripcion: 'PAN DE LOMO, QUESO DAMBO, JAMON Y PAPAS FRITAS',
-        precio: 8000,
-        emoji: '🥖',
-        imagen: '../files/tostado.png'
-    },
-];
+let sandwiches = [];
 
-const pizzas = [
-    {
-        id: 'pizza1',
-        nombre: 'Pizza Mozzarella',
-        descripcion: 'MASA CASERA, SALSA , MUZZARELLA, OREGANO Y ACEITUNAS',
-        precio: 11000,
-        emoji: '🍕',
-        imagen: '../files/pizza_mozzarella.png'
-    },
-    {
-        id: 'pizza2',
-        nombre: '1/2 Pizza Mozzarella',
-        descripcion: 'MASA CASERA, SALSA , MUZZARELLA, OREGANO Y ACEITUNAS',
-        precio: 7000,
-        emoji: '🍕',
-        imagen: '../files/pizza_mozzarella.png'
-    },
-    {
-        id: 'pizza3',
-        nombre: 'Pizza mozzarella con huevo',
-        descripcion: 'MASA CASERA, SALSA, MUZZARELLA, HUEVO RAYADO, OREGANO Y ACEITUNAS',
-        precio: 13000,
-        emoji: '🍕',
-        imagen: '../files/pizza_mozzarella_con_huevo.png'
-    },
-    {
-        id: 'pizza4',
-        nombre: '1/2 Pizza mozzarella con huevo',
-        descripcion: 'MASA CASERA, SALSA, MUZZARELLA, HUEVO RAYADO, OREGANO Y ACEITUNAS',
-        precio: 8000,
-        emoji: '🍕',
-        imagen: '../files/pizza_mozzarella_con_huevo.png'
-    },
-    {
-        id: 'pizza5',
-        nombre: 'Pizza Especial',
-        descripcion: 'MASA CASERA, SALSA, MUZZARELLA, JAMON, MORRON, OREGANO Y ACEITUNAS',
-        precio: 13000,
-        emoji: '🍕',
-        imagen: '../files/pizza_especial.png'
-    },
-    {
-        id: 'pizza6',
-        nombre: '1/2 Pizza Especial',
-        descripcion: 'MASA CASERA, SALSA, MUZZARELLA, JAMON, MORRON, OREGANO Y ACEITUNAS',
-        precio: 8000,
-        emoji: '🍕',
-        imagen: '../files/pizza_especial.png'
-    },
-    {
-        id: 'pizza7',
-        nombre: 'Pizza Especial con Huevo',
-        descripcion: 'MASA PARA PIZZA, SALSA, JAMON, MUZZARELLA, HUEVO RAYADO , ACEITUNAS Y OREGANO',
-        precio: 14500,
-        emoji: '🍕',
-        imagen: '../files/pizza_especial_con_huevo.png'
-    },
-    {
-        id: 'pizza8',
-        nombre: '1/2 Pizza Especial con Huevo',
-        descripcion: 'MASA PARA PIZZA, SALSA, JAMON, MUZZARELLA, HUEVO RAYADO , ACEITUNAS Y OREGANO',
-        precio: 9000,
-        emoji: '🍕',
-        imagen: '../files/pizza_especial_con_huevo.png'
-    },
-    {
-        id: 'pizza9',
-        nombre: 'Pizza Fugazzeta',
-        descripcion: 'MASA CASERA, MUZZARELLA, CEBOLLA Y ACEITUNAS',
-        precio: 13000,
-        emoji: '🍕',
-        imagen: '../files/pizza_fugazzeta.png'
-    },
-    {
-        id: 'pizza10',
-        nombre: '1/2 Pizza Fugazzeta',
-        descripcion: 'MASA CASERA, MUZZARELLA, CEBOLLA Y ACEITUNAS',
-        precio: 8000,
-        emoji: '🍕',
-        imagen: '../files/pizza_fugazzeta.png'
-    },
-    {
-        id: 'pizza11',
-        nombre: 'Pizza Napolitana',
-        descripcion: 'MASA CASERA, SALSA, MUZZARELLA, TOMATE, ACEITUNAS',
-        precio: 13000,
-        emoji: '🍕',
-        imagen: '../files/pizza_napolitana.png'
-    },
-    {
-        id: 'pizza12',
-        nombre: '1/2 Pizza Napolitana',
-        descripcion: 'MASA CASERA, SALSA, MUZZARELLA, TOMATE, ACEITUNAS',
-        precio: 8000,
-        emoji: '🍕',
-        imagen: '../files/pizza_napolitana.png'
-    }
-];
+let pizzas = [];
 
-const papas = [
-    {
-        id: 'papa1',
-        nombre: 'Papas Clásicas',
-        descripcion: 'Papas fritas crujientes con sal',
-        precio: 9000,
-        emoji: '🍟',
-        imagen: '../files/papas_clasicas.png'
-    },
-    {
-        id: 'papa2',
-        nombre: 'Papas con Huevo',
-        descripcion: 'Papas fritas con huevo revuelto',
-        precio: 11000,
-        emoji: '🍟',
-        imagen: '../files/papas_con_huevo.png'
-    },
-    {
-        id: 'papa3',
-        nombre: 'Papas con Cheddar y Bacon',
-        descripcion: 'Papas fritas con queso cheddar y trozos de bacon',
-        precio: 12500,
-        emoji: '🍟',
-        imagen: '../files/papas_con_cheddar.png'
-    }
-];
+let papas = [];
 
-const empanadas = [
-    {
-        id: 'emp1',
-        nombre: 'Docena de Empanadas Árabe',
-        descripcion: 'Docena de empanadas árabes',
-        precio: 20000,
-        emoji: '🥟',
-        imagen: '../files/empanada_arabe.png'
-    },
-    {
-        id: 'emp2',
-        nombre: 'Docena de Empanadas Criolla Salada',
-        descripcion: 'Docena de empanadas criollas saladas',
-        precio: 20000,
-        emoji: '🥟',
-        imagen: '../files/empanada_criolla_salada.png'
-    },
-    {
-        id: 'emp3',
-        nombre: 'Docena de Empanadas Jamón y Queso',
-        descripcion: 'Docena de empanadas de jamón y queso',
-        precio: 20000,
-        emoji: '🥟',
-        imagen: '../files/empanada_jamon_queso.png'
-    },
-    {
-        id: 'emp4',
-        nombre: 'Empanada Árabe (Unidad)',
-        descripcion: 'Empanada árabe',
-        precio: 2000,
-        emoji: '🥟',
-        imagen: '../files/empanada_arabe.png'
-    },
-    {
-        id: 'emp5',
-        nombre: 'Empanada Criolla Salada (Unidad)',
-        descripcion: 'Empanada criolla salada',
-        precio: 2000,
-        emoji: '🥟',
-        imagen: '../files/empanada_criolla_salada.png'
-    },
-    {
-        id: 'emp6',
-        nombre: 'Empanada Jamón y Queso (Unidad)',
-        descripcion: 'Empanada de jamón y queso',
-        precio: 2000,
-        emoji: '🥟',
-        imagen: '../files/empanada_jamon_queso.png'
-    }
-];
+let empanadas = [];
 
-const vegetarianos = [
-    {
-        id: 'veg1',
-        nombre: 'Hamburguesa Vegetariana Simple',
-        descripcion: 'PAN DE PAPA, MAYONESA CASERA, MEDALLON VEGETARIANO, LECHUGA, TOMATE, HUEVO, PEPINILLO, QUESO TYBO Y PAPAS FRITAS',
-        precio: 11500,
-        emoji: '🥗',
-        imagen: '../files/hamburguesa_vegetariana_simple.png'
-    },
-    {
-        id: 'veg2',
-        nombre: 'Hamburguesa Vegetariana Doble',
-        descripcion: 'PAN DE PAPA, MAYONESA CASERA, DOS MEDALLONES VEGETARIANO, LECHUGA, TOMATE, HUEVO, PEPINILLO, QUESO TYBO Y PAPAS FRITAS',
-        precio: 14000,
-        emoji: '🥗',
-        imagen: '../files/hamburguesa_vegetariana_doble.png'
-    },
-    {
-        id: 'veg3',
-        nombre: 'Hamburguesa Vegetariana Triple',
-        descripcion: 'PAN DE PAPA, MAYONESA CASERA, TRES MEDALLONES VEGETARIANO, LECHUGA, TOMATE, HUEVO, PEPINILLO, QUESO TYBO Y PAPAS FRITAS',
-        precio: 16500,
-        emoji: '🥗',
-        imagen: '../files/hamburguesa_vegetariana_triple.png'
-    },
-    {
-        id: 'veg4',
-        nombre: 'Lomo Vegetariano',
-        descripcion: 'PAN DE LOMO DE 20CM, BERENJENA SALTEADA, CEBOLLA SALTEADA, PIMIENTOS SALTEADOS (ROJO, AMARILLO Y VERDE), LECHUGA, TOMATE, HUEVO, QUESO TYBO Y PAPAS FRITAS',
-        precio: 14000,
-        emoji: '🥗',
-        imagen: '../files/lomo_vegetariano.png'
-    }
-];
+let vegetarianos = [];
 
-const aderezos = [
-    {
-        id: 'aderezo1',
-        nombre: 'Mayonesa Casera',
-        descripcion: 'Mayonesa fresca y cremosa preparada en casa',
-        precio: 1000,
-        emoji: '🍯',
-    },
-    {
-        id: 'aderezo2',
-        nombre: 'Mayonesa con Ajo',
-        descripcion: 'Mayonesa casera con ajo fresco',
-        precio: 1000,
-        emoji: '🍯',
-    },
-    {
-        id: 'aderezo3',
-        nombre: 'Cheddar',
-        descripcion: 'Salsa de queso cheddar cremoso',
-        precio: 2000,
-        emoji: '🍯',
-    },
-    {
-        id: 'aderezo4',
-        nombre: 'Barbacoa',
-        descripcion: 'Salsa BBQ ahumada y dulce',
-        precio: 1000,
-        emoji: '🍯',
-    },
-    {
-        id: 'aderezo5',
-        nombre: 'Ketchup',
-        descripcion: 'Ketchup de tomate natural',
-        precio: 1000,
-        emoji: '🍯',
-    },
-    {
-        id: 'aderezo6',
-        nombre: 'Mostaza',
-        descripcion: 'Mostaza clásica picante',
-        precio: 1000,
-        emoji: '🍯',
-    },
-    {
-        id: 'aderezo7',
-        nombre: 'Salsa Picante',
-        descripcion: 'Salsa picante con chiles y especias',
-        precio: 1000,
-        emoji: '🍯',
+let aderezos = [];
 
-    },
-    {
-        id: 'aderezo8',
-        nombre: 'Chimichurri',
-        descripcion: 'Chimichurri argentino con hierbas frescas',
-        precio: 1000,
-        emoji: '🍯',
-    }
-];
+let bebidas = [];
 
-const bebidas = [
-    {
-        id: 'beb1',
-        nombre: 'Coca Cola 500ml',
-        descripcion: 'Refresco clásico y refrescante',
-        precio: 3000,
-        emoji: '🥤',
-        imagen: '../files/coca_medio.png'
-    },
-    {
-        id: 'beb2',
-        nombre: 'Fanta 500ml',
-        descripcion: 'Refresco sabor naranja',
-        precio: 3000,
-        emoji: '🥤',
-        imagen: '../files/fanta_medio.png'
-    },
-    {
-        id: 'beb3',
-        nombre: 'Sprite 500ml',
-        descripcion: 'Refresco sabor lima-limón',
-        precio: 3000,
-        emoji: '🥤',
-        imagen: '../files/sprite_medio.png'
-    },
-    {
-        id: 'beb4',
-        nombre: 'Coca Cola Zero 500ml',
-        descripcion: 'Coca Cola sin azúcar',
-        precio: 3000,
-        emoji: '🥤',
-        imagen: '../files/coca_zero_medio.png'
-    },
-    {
-        id: 'beb5',
-        nombre: 'Schweppes 500ml',
-        descripcion: 'Agua tónica premium',
-        precio: 3000,
-        emoji: '🥤',
-        imagen: '../files/schweppes_medio.png'
-    },
-    {
-        id: 'beb6',
-        nombre: 'Agua Bonaqua 500ml',
-        descripcion: 'Agua mineral natural',
-        precio: 2500,
-        emoji: '🥤',
-        imagen: '../files/agua_medio.png'
-    },
-    {
-        id: 'beb7',
-        nombre: 'Aquarius Manzana 500ml',
-        descripcion: 'Bebida isotónica sabor manzana',
-        precio: 3000,
-        emoji: '🥤',
-        imagen: '../files/aquarius_manzana_medio.png'
-    },
-    {
-        id: 'beb8',
-        nombre: 'Aquarius Pera 500ml',
-        descripcion: 'Bebida isotónica sabor pera',
-        precio: 3000,
-        emoji: '🥤',
-        imagen: '../files/aquarius_pera_medio.png'
-    },
-    {
-        id: 'beb9',
-        nombre: 'Aquarius Pomelo 500ml',
-        descripcion: 'Bebida isotónica sabor pomelo',
-        precio: 3000,
-        emoji: '🥤',
-        imagen: '../files/aquarius_pomelo_medio.png'
-    },
-    {
-        id: 'beb10',
-        nombre: 'Aquarius Naranja 500ml',
-        descripcion: 'Bebida isotónica sabor naranja',
-        precio: 3000,
-        emoji: '🥤',
-        imagen: '../files/aquarius_naranja_medio.png'
-    },
-    {
-        id: 'beb11',
-        nombre: 'Aquarius Limonada 500ml',
-        descripcion: 'Bebida isotónica sabor limonada',
-        precio: 3000,
-        emoji: '🥤',
-        imagen: '../files/aquarius_limonada_medio.png'
-    },
-    {
-        id: 'beb12',
-        nombre: 'Aquarius Manzana 1,5L',
-        descripcion: 'Bebida isotónica sabor manzana formato familiar',
-        precio: 6500,
-        emoji: '🥤',
-        imagen: '../files/aquarius_manzana_litro.png'
-    },
-    {
-        id: 'beb13',
-        nombre: 'Aquarius Pera 1,5L',
-        descripcion: 'Bebida isotónica sabor pera formato familiar',
-        precio: 6500,
-        emoji: '🥤',
-        imagen: '../files/aquarius_pera_litro.png'
-    },
-    {
-        id: 'beb14',
-        nombre: 'Coca Cola 1,5L',
-        descripcion: 'Refresco clásico formato familiar',
-        precio: 7000,
-        emoji: '🥤',
-        imagen: '../files/coca_litro.png'
-    },
-    {
-        id: 'beb15',
-        nombre: 'Coca Cola Zero 1,5L',
-        descripcion: 'Coca Cola sin azúcar formato familiar',
-        precio: 7000,
-        emoji: '🥤',
-        imagen: '../files/coca_zero_litro.png'
-    },
-    {
-        id: 'beb16',
-        nombre: 'Fanta 1,5L',
-        descripcion: 'Refresco sabor naranja formato familiar',
-        precio: 7000,
-        emoji: '🥤',
-        imagen: '../files/fanta_litro.png'
-    },
-    {
-        id: 'beb17',
-        nombre: 'Sprite 1,5L',
-        descripcion: 'Refresco sabor lima-limón formato familiar',
-        precio: 7000,
-        emoji: '🥤',
-        imagen: '../files/sprite_litro.png'
-    },
-    {
-        id: 'beb18',
-        nombre: 'Schweppes 1,5L',
-        descripcion: 'Agua tónica premium formato familiar',
-        precio: 7000,
-        emoji: '🥤',
-        imagen: '../files/schweppes_litro.png'
-    },
-    {
-        id: 'beb19',
-        nombre: 'Cerveza Monjita Heineken',
-        descripcion: 'Cerveza Heineken en botella monjita',
-        precio: 6000,
-        emoji: '🍺',
-        imagen: '../files/monjita_heineken.png'
-    },
-    {
-        id: 'beb20',
-        nombre: 'Cerveza Monjita Corona',
-        descripcion: 'Cerveza Corona en botella monjita',
-        precio: 6000,
-        emoji: '🍺',
-        imagen: '../files/monjita_corona.png'
-    },
-    {
-        id: 'beb21',
-        nombre: 'Cerveza Lata Miller',
-        descripcion: 'Cerveza Miller en lata',
-        precio: 6000,
-        emoji: '🍺',
-        imagen: '../files/lata_miller.png'
-    },
-    {
-        id: 'beb22',
-        nombre: 'Cerveza Lata Imperial',
-        descripcion: 'Cerveza Imperial en lata',
-        precio: 6000,
-        emoji: '🍺',
-        imagen: '../files/lata_imperial.png'
-    },
-    {
-        id: 'beb23',
-        nombre: 'Cerveza Lata Amstel',
-        descripcion: 'Cerveza Amstel en lata',
-        precio: 5500,
-        emoji: '🍺',
-        imagen: '../files/lata_amstel.png'
-    },
-    {
-        id: 'beb24',
-        nombre: 'Cerveza Lata Heineken',
-        descripcion: 'Cerveza Heineken en lata',
-        precio: 6500,
-        emoji: '🍺',
-        imagen: '../files/lata_heineken.png'
-    }
-];
+let wraps = [];
 
-const wraps = [
-    {
-        id: 'wrap1',
-        nombre: 'Wrap de Pollo',
-        descripcion: 'Pollo a la parrilla con lechuga, tomate y mayonesa',
-        precio: 6.99,
-        emoji: '🐔'
-    },
-    {
-        id: 'wrap2',
-        nombre: 'Wrap de Lomo',
-        descripcion: 'Lomo tierno con cebolla morada y chimichurri',
-        precio: 7.99,
-        emoji: '🥩'
-    },
-    {
-        id: 'wrap3',
-        nombre: 'Wrap Vegano',
-        descripcion: 'Humus, vegetales frescos y aguacate',
-        precio: 5.99,
-        emoji: '🥬'
-    },
-    {
-        id: 'wrap4',
-        nombre: 'Wrap de Camarón',
-        descripcion: 'Camarones al ajillo con lechuga y salsa tártara',
-        precio: 8.49,
-        emoji: '🦐'
-    },
-    {
-        id: 'wrap5',
-        nombre: 'Wrap Mixto',
-        descripcion: 'Pollo y lomo con queso, lechuga y tomate',
-        precio: 7.49,
-        emoji: '⭐'
-    },
-    {
-        id: 'wrap6',
-        nombre: 'Wrap Picante',
-        descripcion: 'Pollo con jalapeños, queso cheddar y salsa picante',
-        precio: 6.99,
-        emoji: '🌶️'
-    }
-];
-
-const promos = [
-    {
-        id: 'promo1',
-        nombre: 'Combo Hamburguesa + Papas',
-        descripcion: 'Hamburguesa + Papas Fritas + Bebida',
-        precio: 9.99,
-        emoji: '🍔'
-    },
-    {
-        id: 'promo2',
-        nombre: 'Combo Lomo Premium',
-        descripcion: 'Lomo + Papas + Bebida + Postre',
-        precio: 12.99,
-        emoji: '🥩'
-    },
-    {
-        id: 'promo3',
-        nombre: 'Combo Amigos',
-        descripcion: '2 Hamburguesas + 2 Papas + 2 Bebidas',
-        precio: 17.99,
-        emoji: '👨‍👩‍👧'
-    },
-    {
-        id: 'promo4',
-        nombre: 'Combo Familia',
-        descripcion: '4 Hamburguesas + 3 Papas + Bebidas',
-        precio: 24.99,
-        emoji: '👨‍👩‍👧‍👦'
-    },
-    {
-        id: 'promo5',
-        nombre: 'Combo Wrap + Papas',
-        descripcion: 'Wrap + Papas Fritas + Bebida',
-        precio: 10.99,
-        emoji: '🌯'
-    },
-    {
-        id: 'promo6',
-        nombre: 'Combo Vegetariano',
-        descripcion: 'Hamburguesa Vegetariana + Papas + Bebida',
-        precio: 8.99,
-        emoji: '🥬'
-    }
-];
+let promos = [];
 
 function renderizarHamburguesas() {
     const grid = document.getElementById('grid-hamburguesas');
@@ -1310,7 +597,7 @@ function actualizarCarrito() {
 
     const subtotal = carrito.getTotal();
     const deliveryCheck = document.getElementById('delivery');
-    const delivery = deliveryCheck && deliveryCheck.checked ? 500 : 0;
+    const delivery = deliveryCheck && deliveryCheck.checked ? obtenerCostoDelivery() : 0;
     const total = subtotal + delivery;
     
     const subtotalEl = document.getElementById('subtotal');
@@ -1338,8 +625,24 @@ function disminuirCantidad(id) {
     }
 }
 
-function vaciarCarrito() {
-    if (confirm('¿Estás seguro de que deseas vaciar el carrito?')) {
+async function vaciarCarrito() {
+    const SwalRef = await cargarSweetAlert();
+
+    if (!SwalRef) {
+        mostrarAlerta('⚠️ No se pudo abrir la confirmación. Intenta nuevamente.', 'error');
+        return;
+    }
+
+    const resultado = await SwalRef.fire({
+        title: '¿Vaciar carrito?',
+        text: 'Se eliminarán todos los productos del carrito.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, vaciar',
+        cancelButtonText: 'Cancelar'
+    });
+
+    if (resultado.isConfirmed) {
         carrito.vaciar();
         actualizarCarrito();
     }
@@ -1351,6 +654,78 @@ function mostrarFormulario() {
         return;
     }
     document.querySelector('.formulario-cliente').scrollIntoView({ behavior: 'smooth' });
+}
+
+function leerDatosClienteGuardados() {
+    const datos = localStorage.getItem(STORAGE_CLIENTE_KEY);
+    if (!datos) return null;
+    try {
+        return JSON.parse(datos);
+    } catch {
+        return null;
+    }
+}
+
+function obtenerDatosClienteFormulario() {
+    const nombre = document.getElementById('nombre');
+    const telefono = document.getElementById('telefono');
+    const email = document.getElementById('email');
+    const direccion = document.getElementById('direccion');
+    const delivery = document.getElementById('delivery');
+    const notas = document.getElementById('notas');
+
+    if (!nombre || !telefono || !email || !direccion || !delivery || !notas) {
+        return null;
+    }
+
+    return {
+        nombre: nombre.value,
+        telefono: telefono.value,
+        email: email.value,
+        direccion: direccion.value,
+        delivery: delivery.checked,
+        notas: notas.value
+    };
+}
+
+function guardarDatosClienteParciales() {
+    const datos = obtenerDatosClienteFormulario();
+    if (!datos) return;
+    localStorage.setItem(STORAGE_CLIENTE_KEY, JSON.stringify(datos));
+}
+
+function precargarFormularioCliente() {
+    const datos = leerDatosClienteGuardados();
+    if (!datos) return;
+
+    const nombre = document.getElementById('nombre');
+    const telefono = document.getElementById('telefono');
+    const email = document.getElementById('email');
+    const direccion = document.getElementById('direccion');
+    const delivery = document.getElementById('delivery');
+    const notas = document.getElementById('notas');
+
+    if (nombre) nombre.value = datos.nombre || '';
+    if (telefono) telefono.value = datos.telefono || '';
+    if (email) email.value = datos.email || '';
+    if (direccion) direccion.value = datos.direccion || '';
+    if (delivery) delivery.checked = Boolean(datos.delivery);
+    if (notas) notas.value = datos.notas || '';
+}
+
+function configurarAutoguardadoFormulario() {
+    const campos = ['nombre', 'telefono', 'email', 'direccion', 'notas'];
+    campos.forEach((idCampo) => {
+        const campo = document.getElementById(idCampo);
+        if (campo) {
+            campo.addEventListener('input', guardarDatosClienteParciales);
+        }
+    });
+
+    const delivery = document.getElementById('delivery');
+    if (delivery) {
+        delivery.addEventListener('change', guardarDatosClienteParciales);
+    }
 }
 
 function enviarPedido(event) {
@@ -1379,14 +754,19 @@ function enviarPedido(event) {
 
     setTimeout(() => {
         carrito.vaciar();
-        document.querySelector('form').reset();
+        const formulario = document.querySelector('form');
+        if (formulario) formulario.reset();
+        localStorage.removeItem(STORAGE_CLIENTE_KEY);
         actualizarCarrito();
         mostrarAlerta('✓ Pedido enviado por WhatsApp. ¡Gracias por tu compra!', 'exito');
     }, 500);
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    await cargarConfiguracion();
+    await cargarProductos();
     carrito.actualizarContador();
+    await cargarSweetAlert();
     
     renderizarHamburguesas();
     renderizarLomos();
@@ -1399,6 +779,9 @@ document.addEventListener('DOMContentLoaded', () => {
     renderizarBebidas();
     renderizarWraps();
     renderizarPromos();
+
+    precargarFormularioCliente();
+    configurarAutoguardadoFormulario();
     
     if (document.getElementById('carrito-vacio') || document.getElementById('carrito-contenido')) {
         actualizarCarrito();
